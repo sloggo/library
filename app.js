@@ -15,7 +15,7 @@ function addBookToLibrary(title, author, pages, read) {
 
 addBookToLibrary('Lord of The Rings','Tolkien',3534,true)
 
-myLibrary.forEach(book => {
+function createBookContainer(book) {
     let $bookShelf = document.querySelector('.bookShelf')
 
     let $bookContainer = document.createElement('div')
@@ -37,4 +37,6 @@ myLibrary.forEach(book => {
     $bookContainer.appendChild($bookPages)
 
     $bookShelf.appendChild($bookContainer)
-})
+}
+
+myLibrary.forEach(createBookContainer)
