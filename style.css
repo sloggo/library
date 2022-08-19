@@ -1,0 +1,27 @@
+*{
+    margin: 0px;
+    padding: 0px;
+}
+
+.bookShelf{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 20%));
+    gap: 10px;
+
+    background-color: bisque;
+    padding: 0px;
+}
+
+.bookContainer{
+    background-color: aquamarine;
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: 200px;
+}
+
+.bookShelfContainer{
+    display: flex;
+    flex-direction: column;
+}
