@@ -1,19 +1,18 @@
 let myLibrary = [];
 
+const $addBook = document.querySelector('#addBook');
+
 function Book(title, author, pages, read) {
     this.title = title,
     this.author = author,
     this.pages = pages,
-    this.read = read
+    this.read = read,
+
+    this.addBookToLibrary = function(){
+        myLibrary.push(this);
+    }
 }
 
-function addBookToLibrary(title, author, pages, read) {
-    let newBook = new Book(title, author, pages, read);
-
-    myLibrary.push(newBook)
-}
-
-addBookToLibrary('Lord of The Rings','Tolkien',3534,true)
 
 function createBookContainer(book) {
     let $bookShelf = document.querySelector('.bookShelf')
@@ -39,4 +38,23 @@ function createBookContainer(book) {
     $bookShelf.appendChild($bookContainer)
 }
 
+$addBook.addEventListener('click', () =>{
+    let $formObj = document.querySelector('form')
+    let $bookTitleInput = document.querySelector('input[name="title"]');
+    let $bookAuthorInput = document.querySelector('input[name="author"]');
+    let $bookPagesInput = document.querySelector('input[name="pages"]');
+    let $bookReadInput = document.querySelector('input[name="read"]');
+
+    if($bookTitleInput.value && $bookAuthorInput.value && $bookPagesInput.value && $bookReadInput.value){
+        let newBook = new Book($bookTitleInput.value, $bookAuthorInput.value, $bookPagesInput.value, $bookReadInput.value)
+        newBook.addBookToLibrary()
+        createBookContainer(newBook)
+    }
+
+    $formObj.reset()
+})
+
+let test = new Book('Lord of The Rings','Tolkien',3534,true).addBookToLibrary()
+
 myLibrary.forEach(createBookContainer)
+
