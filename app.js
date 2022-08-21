@@ -14,11 +14,12 @@ function Book(title, author, pages, read) {
 }
 
 
-function createBookContainer(book) {
+function createBookContainer(book, index) {
     let $bookShelf = document.querySelector('.bookShelf')
 
     let $bookContainer = document.createElement('div')
     $bookContainer.classList.add('bookContainer')
+    $bookContainer.setAttribute('data-index', index)
 
     let $bookTitle = document.createElement('h1')
     $bookTitle.classList.add('title')
@@ -35,6 +36,47 @@ function createBookContainer(book) {
     $bookPages.textContent = book.pages
     $bookContainer.appendChild($bookPages)
 
+    let $bookRead = document.createElement('input')
+    $bookRead.type = 'checkbox'
+    if(book.read === true){
+        $bookRead.checked = true;
+    } else{
+        $bookRead.checked = false;
+    }
+    $bookContainer.appendChild($bookRead)
+
+    $bookRead.addEventListener('change', (e) =>{
+        const indexOfEvent = e.target.parentNode.getAttribute('data-index');
+        if(myLibrary[indexOfEvent].read){
+            myLibrary[indexOfEvent].read = false
+        } else if(!(myLibrary[indexOfEvent].read)){
+            myLibrary[indexOfEvent].read = true
+        }
+
+        console.log(myLibrary[indexOfEvent].read)
+
+        $bookShelf.innerHTML = '';
+        myLibrary.forEach((book, index) =>{
+            createBookContainer(book, index);
+        })
+    })
+
+    let $bookRemove = document.createElement('button')
+    $bookRemove.classList.add('removeButton')
+    $bookRemove.textContent = 'remove'
+    $bookContainer.appendChild($bookRemove);
+
+    $bookRemove.addEventListener('click', (e) =>{
+        const indexToRemove = e.target.parentNode.getAttribute('data-index');
+        console.log(indexToRemove)
+        myLibrary.splice(indexToRemove,1);
+
+        $bookShelf.innerHTML = '';
+        myLibrary.forEach((book, index) =>{
+            createBookContainer(book, index);
+        })
+    })
+
     $bookShelf.appendChild($bookContainer)
 }
 
@@ -45,16 +87,19 @@ $addBook.addEventListener('click', () =>{
     let $bookPagesInput = document.querySelector('input[name="pages"]');
     let $bookReadInput = document.querySelector('input[name="read"]');
 
-    if($bookTitleInput.value && $bookAuthorInput.value && $bookPagesInput.value && $bookReadInput.value){
-        let newBook = new Book($bookTitleInput.value, $bookAuthorInput.value, $bookPagesInput.value, $bookReadInput.value)
+    if($bookTitleInput.value && $bookAuthorInput.value && $bookPagesInput.value){
+        let newBook = new Book($bookTitleInput.value, $bookAuthorInput.value, $bookPagesInput.value, $bookReadInput.checked)
+        let newIndex = myLibrary.length
         newBook.addBookToLibrary()
-        createBookContainer(newBook)
+        createBookContainer(newBook, newIndex)
     }
 
     $formObj.reset()
 })
 
-let test = new Book('Lord of The Rings','Tolkien',3534,true).addBookToLibrary()
+let test = new Book('Lord of The Rings','Tolkien',3534,false).addBookToLibrary()
 
-myLibrary.forEach(createBookContainer)
+myLibrary.forEach((book, index) =>{
+    createBookContainer(book, index);
+})
 
